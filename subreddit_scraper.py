@@ -1,7 +1,7 @@
 import praw
-import json
 import requests
 import os
+import argparse
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -16,23 +16,25 @@ reddit = praw.Reddit(
     user_agent=USER_AGENT
 )
 
-def fetch_images(limit=10):
-    subreddit = reddit.subreddit("greentext")
+def get_args():
+    parser = argparse.ArgumentParser(description="Fetch images from a subreddit.")
+    parser.add_argument("--subreddit", type=str, default="itookapicture", help="Subreddit to fetch from")
+    parser.add_argument("--limit", type=int, default=10, help="Number of posts to fetch")
+    return parser.parse_args()
+
+def fetch_images(subreddit, limit):
+    subreddit = reddit.subreddit(subreddit)
     images = []
 
     for post in subreddit.new(limit=limit):
-        if post.is_self:
-            continue
-        
-        image_url = post.url
-        if image_url.endswith(("jpg", "jpeg", "png")): 
+        if not post.is_self and post.url.endswith(("jpg", "jpeg", "png", "gif")):
             images.append({
                 "title": post.title,
                 "upvotes": post.score,
                 "url": post.url,
-                "image_url": image_url
+                "image_url": post.url
             })
-    
+
     return images
 
 def download_images(images, folder="images"):
@@ -41,7 +43,7 @@ def download_images(images, folder="images"):
 
     for i, item in enumerate(images):
         image_url = item["image_url"]
-        filename = os.path.join(folder, f"{i+1}.jpg")
+        filename = os.path.join(folder, f"image_{i+1}.jpg")
 
         try:
             response = requests.get(image_url, stream=True)
@@ -56,5 +58,8 @@ def download_images(images, folder="images"):
             print(f"Error downloading {image_url}: {e}")
 
 if __name__ == "__main__":
-    images = fetch_images(limit=10)
-    download_images(images)
+    args = get_args()
+    print(f"🔍 Fetching {args.limit} posts from r/{args.subreddit}...")
+    
+    posts = fetch_images(args.subreddit, args.limit)
+    download_images(posts)
