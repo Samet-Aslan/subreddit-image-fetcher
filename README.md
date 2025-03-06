@@ -3,14 +3,11 @@
 
 A Python-based tool that fetches and processes content from any subreddit.
 
-## 🚧 Development Status  
-⚠️ This project is still in active development. Features may change, and bugs may exist.  
-
 ## ✨ Features  
-✅ Retrieve latest posts from specified subreddits  
-✅ Filter and download content (text, images, or other media)  
-✅ Analyze and categorize posts based on predefined criteria  
-✅ Ignore or flag sensitive content based on platform guidelines  
+✅ Retrieve latest 10 posts from specified subreddits  
+🔜 Filter and download content (text, images, or other media)  
+🔜Analyze and categorize posts based on predefined criteria  
+🔜 Ignore or flag sensitive content based on platform guidelines  
 🔜 Future features: Custom subreddit selection, automation tools  
 
 ## 📦 Installation  
