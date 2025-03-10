@@ -51,7 +51,7 @@ def download_images(images, folder="images"):
                 with open(filename, "wb") as f:
                     for chunk in response.iter_content(1024):
                         f.write(chunk)
-                print(f"✅ Downloaded: {filename}")
+                print(f"Downloaded: {filename}")
             else:
                 print(f"Failed to download: {image_url}")
         except Exception as e:
