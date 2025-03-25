@@ -48,6 +48,8 @@ def download_images(images, folder="images"):
         try:
             response = requests.get(image_url, stream=True)
             if response.status_code == 200:
+                if "../" in filename or "..\\" in filename:
+                    raise Exception("Invalid file path")
                 with open(filename, "wb") as f:
                     for chunk in response.iter_content(1024):
                         f.write(chunk)
